@@ -5,13 +5,12 @@ import javax.swing.*;
 class Student implements ActionListener {
     Student(){
         JFrame jfrm = new JFrame();
-        //jfrm.setLocation(180,35);
-        //jfrm.setSize(1200,800); 
+       
         jfrm.setExtendedState(JFrame.MAXIMIZED_BOTH); 
         jfrm.setUndecorated(true);
-        jfrm.setLayout(new GridLayout(4,2));
+        jfrm.setLayout(new GridLayout(3,1));
        
-        //jfrm.getContentPane().setBackground(Color.GREEN);
+        jfrm.setBackground(Color.GREEN);
 
         //Header
         JPanel jp0 = new JPanel(new GridLayout(2,1));
@@ -24,9 +23,10 @@ class Student implements ActionListener {
         jp0.add(jlab);        
         jp0.add(jlab1);
 
-        JPanel jp1 = new  JPanel(new FlowLayout());
-        jfrm.add(jp1);
-
+        FlowLayout f = new FlowLayout();
+        JPanel jp1 = new  JPanel(f);
+       
+        f.setHgap(35);
         JLabel jlab2 = new JLabel("SIMS.# : ");
         jlab2.setFont(new Font("SansSerif",Font.PLAIN,20));
         jp1.add(jlab2);
@@ -35,10 +35,9 @@ class Student implements ActionListener {
         jtf.setFont(new Font("SansSerif",Font.PLAIN,20));
         jp1.add(jtf);
 
-        JPanel jp2 = new JPanel(new FlowLayout());
         JButton jb1 = new JButton("submit"); 
-        jp2.add(jb1);
-        jfrm.add(jp2);
+        jp1.add(jb1);
+        jfrm.add(jp1);
         jfrm.setVisible(true);
 
     }
