@@ -9,8 +9,7 @@ class Student implements ActionListener {
         jfrm.setExtendedState(JFrame.MAXIMIZED_BOTH); 
         jfrm.setUndecorated(true);
         jfrm.setLayout(new GridLayout(3,1));
-       
-        jfrm.setBackground(Color.GREEN);
+        //jfrm.setBackground(Color.GREEN);
 
         //Header
         JPanel jp0 = new JPanel(new GridLayout(2,1));
@@ -25,7 +24,6 @@ class Student implements ActionListener {
 
         FlowLayout f = new FlowLayout();
         JPanel jp1 = new  JPanel(f);
-       
         f.setHgap(35);
         JLabel jlab2 = new JLabel("SIMS.# : ");
         jlab2.setFont(new Font("SansSerif",Font.PLAIN,20));
@@ -47,4 +45,5 @@ class Student implements ActionListener {
     public static void main(String args[]){
         new Student();
     }
+
 }
