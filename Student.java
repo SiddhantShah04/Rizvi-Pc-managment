@@ -1,8 +1,11 @@
 import java.awt.*;
 import java.awt.event.*;
+import java.sql.*;  
 import javax.swing.*;
 
 class Student implements ActionListener {
+    JTextField jtf;
+    JButton jb1;
     Student(){
         JFrame jfrm = new JFrame();
        
@@ -29,18 +32,37 @@ class Student implements ActionListener {
         jlab2.setFont(new Font("SansSerif",Font.PLAIN,20));
         jp1.add(jlab2);
 
-        JTextField jtf = new JTextField(10);
+        jtf = new JTextField(10);
         jtf.setFont(new Font("SansSerif",Font.PLAIN,20));
         jp1.add(jtf);
 
-        JButton jb1 = new JButton("submit"); 
+        jb1 = new JButton("submit"); 
+        jb1.addActionListener(this);
         jp1.add(jb1);
         jfrm.add(jp1);
         jfrm.setVisible(true);
-
     }
     public void actionPerformed(ActionEvent e){
 
+        System.out.println(jtf.getText());
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/login?characterEncoding=latin1","root","admin");  
+            Statement stmt=con.createStatement(); 
+            ResultSet rs = stmt.executeQuery("select * from student");
+            while(rs.next()){
+                System.out.println(rs.getInt(1));
+                if(rs.getInt(1)){
+                    
+                }
+            }
+            con.close(); 
+        }
+        catch(Exception f){
+            System.out.println(f);
+
+        }
+    
     }
     public static void main(String args[]){
         new Student();
