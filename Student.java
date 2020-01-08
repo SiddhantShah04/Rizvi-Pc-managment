@@ -18,7 +18,7 @@ class Student implements ActionListener {
         //Header
         JPanel jp0 = new JPanel(new GridLayout(2,1));
         jfrm.add(jp0);
-        JLabel jlab = new JLabel("Rizvi Library Pc's managment system",JLabel.CENTER);
+        JLabel jlab = new JLabel(" Pc's managment system",JLabel.CENTER);
         jlab.setFont(new Font("SansSerif",Font.PLAIN,40));
 
         JLabel jlab1 = new JLabel("Please enter your detail",JLabel.CENTER);
@@ -43,7 +43,7 @@ class Student implements ActionListener {
         jfrm.add(jp1);
 
         jp2 = new JPanel(f);
-        jlp3 = new JLabel("Please Enter your correct SMIS number or contact library administration",JLabel.CENTER);
+        jlp3 = new JLabel("Please Enter your correct SIMS number or contact library administration",JLabel.CENTER);
         jlp3.setFont(new Font("SansSerif",Font.PLAIN,15));
         jlp3.setForeground(Color.red);
         jp2.add(jlp3);
@@ -59,7 +59,7 @@ class Student implements ActionListener {
         try{
             Class.forName("com.mysql.jdbc.Driver");
             Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/login?characterEncoding=latin1","root","admin");  
-            PreparedStatement stmt = con.prepareStatement("select * from student where smis=?");
+            PreparedStatement stmt = con.prepareStatement("select * from student where sims=?");
             stmt.setInt(1,i);
             ResultSet rs = stmt.executeQuery();
             if(rs.next()){
@@ -67,7 +67,6 @@ class Student implements ActionListener {
                 //rest code to write when students write the correct smis number
                 jfrm.setAlwaysOnTop(false);
             }else{
-                
                 jp2.setVisible(true);
             }
             con.close(); 
@@ -79,5 +78,6 @@ class Student implements ActionListener {
     public static void main(String args[]){
         new Student();
     }
-
 }
+
+//college pc set classpath=f:\impfiles\folder\mysql-connector.jar;
