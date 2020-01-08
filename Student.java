@@ -64,8 +64,9 @@ class Student implements ActionListener {
             ResultSet rs = stmt.executeQuery();
             if(rs.next()){
                 jp2.setVisible(false);
-                //rest code to write when students write the correct smis number
+                //rest code to write when students write the correct sims number
                 jfrm.setAlwaysOnTop(false);
+                jfrm.setVisible(false);
             }else{
                 jp2.setVisible(true);
             }
