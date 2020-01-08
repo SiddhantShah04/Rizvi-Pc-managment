@@ -54,13 +54,13 @@ class Student implements ActionListener {
         jfrm.setVisible(true);
     }
     public void actionPerformed(ActionEvent e){
-        int i= Integer.parseInt(jtf.getText());
+        int tbText= Integer.parseInt(jtf.getText());
         System.out.println(i);
         try{
             Class.forName("com.mysql.jdbc.Driver");
             Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/login?characterEncoding=latin1","root","admin");  
             PreparedStatement stmt = con.prepareStatement("select * from student where sims=?");
-            stmt.setInt(1,i);
+            stmt.setInt(1,tbText);
             ResultSet rs = stmt.executeQuery();
             if(rs.next()){
                 jp2.setVisible(false);
