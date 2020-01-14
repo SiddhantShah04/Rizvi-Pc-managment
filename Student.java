@@ -10,6 +10,19 @@ class Student implements ActionListener {
     JLabel jlp3;
     JPanel jp2; 
     Student(){
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            //this local host need to be change to admin ip address;
+            Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/login?characterEncoding=latin1","root","admin");  
+            Statement stmt=con.createStatement();
+            ResultSet rs=stmt.executeQuery("select * from pc");  
+            if(rs.next()){
+                //create a frame here for pc number
+            }  
+                  
+             
+            con.close();  
+        }catch(Exception e){System.out.println(e);}
         jfrm = new JFrame();
         jfrm.setExtendedState(JFrame.MAXIMIZED_BOTH); 
         jfrm.setUndecorated(true);
@@ -55,9 +68,10 @@ class Student implements ActionListener {
     }
     public void actionPerformed(ActionEvent e){
         int tbText= Integer.parseInt(jtf.getText());
-        System.out.println(i);
+       // System.out.println(i);
         try{
             Class.forName("com.mysql.jdbc.Driver");
+            //this local host need to be change to admin ip address;
             Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/login?characterEncoding=latin1","root","admin");  
             PreparedStatement stmt = con.prepareStatement("select * from student where sims=?");
             stmt.setInt(1,tbText);
