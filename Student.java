@@ -85,7 +85,6 @@ class Student implements ActionListener {
         }
     }
     public static void main(String args[]){
-
 		try{
             Class.forName("com.mysql.jdbc.Driver");
             //local host is good
@@ -142,13 +141,8 @@ class Student implements ActionListener {
 		}
 			catch(Exception f){
             System.out.println(f);
-        }   
-       
-
-        
-        //
-        new Student();
-
+			
+			}   
     }
 }
 
