@@ -9,20 +9,11 @@ class Student implements ActionListener {
     JFrame jfrm;
     JLabel jlp3;
     JPanel jp2; 
-    Student(){
-        try{
-            Class.forName("com.mysql.jdbc.Driver");
-            //this local host need to be change to admin ip address;
-            Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/login?characterEncoding=latin1","root","admin");  
-            Statement stmt=con.createStatement();
-            ResultSet rs=stmt.executeQuery("select * from pc");  
-            if(rs.next()){
-                //create a frame here for pc number
-            }  
-                  
-             
-            con.close();  
-        }catch(Exception e){System.out.println(e);}
+	int pc;
+    Student(int pcNumber){
+		 pc = pcNumber;
+		System.out.println(pc);
+		
         jfrm = new JFrame();
         jfrm.setExtendedState(JFrame.MAXIMIZED_BOTH); 
         jfrm.setUndecorated(true);
@@ -68,15 +59,18 @@ class Student implements ActionListener {
     }
     public void actionPerformed(ActionEvent e){
         int tbText= Integer.parseInt(jtf.getText());
-       // System.out.println(i);
+        System.out.println(pc);
+	   
         try{
             Class.forName("com.mysql.jdbc.Driver");
             //this local host need to be change to admin ip address;
             Connection con=DriverManager.getConnection("jdbc:mysql://localhost:3306/login?characterEncoding=latin1","root","admin");  
-            PreparedStatement stmt = con.prepareStatement("select * from student where sims=?");
+            PreparedStatement stmt = con.prepareStatement("select * from students where sims=? and pc=?");
             stmt.setInt(1,tbText);
+			stmt.setInt(2,pc);
             ResultSet rs = stmt.executeQuery();
-            if(rs.next()){
+            
+			if(rs.next()){
                 jp2.setVisible(false);
                 //rest code to write when students write the correct sims number
                 jfrm.setAlwaysOnTop(false);
@@ -91,7 +85,64 @@ class Student implements ActionListener {
         }
     }
     public static void main(String args[]){
-        new Student();
+		try{
+            Class.forName("com.mysql.jdbc.Driver");
+            //local host is good
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/login?characterEncoding=latin1","root","admin");  
+            Statement stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery("select * from pc");  
+            if(rs.next() != true){
+               
+			   JFrame f = new JFrame();
+			   
+			   JLabel jlb = new JLabel("Please enter your pc number",JLabel.CENTER);
+			   jlb.setFont(new Font("SansSerif",Font.PLAIN,20));
+			   jlb.setBounds(50,20,300,50);
+			   jlb.setForeground(Color.blue);
+			   f.add(jlb);
+			   
+			   JTextField jtf = new JTextField(10);
+			   Font font = new Font("SansSerif",Font.PLAIN,20);
+			   jtf.setFont(font);
+			   
+			   jtf.setBounds(110,100,150,40);
+			   f.add(jtf);
+			   
+			   JButton jb  = new JButton("Submit");
+			   jb.setBounds(130,170,100,40);
+			   
+			   f.add(jb);
+			   jb.addActionListener(new ActionListener(){
+				   public void actionPerformed(ActionEvent e){
+					   System.out.println(jtf.getText());
+					   try{
+							String sql = "insert into pc values(?)";
+							PreparedStatement spst = con.prepareStatement(sql);
+							spst.setInt(1,Integer.parseInt(jtf.getText()));
+							spst.executeUpdate();
+							con.close();
+					    }
+					   catch(Exception a){System.out.println(f);}
+					  f.dispose(); 
+				    }  
+			    });
+			   f.setSize(400,300);
+			   f.setLocationRelativeTo(null);
+			   f.setUndecorated(true);
+			   f.setLayout(null);
+               f.getContentPane().setBackground(Color.GREEN);
+			   f.setVisible(true);	
+
+			}  else{
+				
+				System.out.println(rs.getInt(1));
+				new Student(rs.getInt(1));
+			}
+		}
+			catch(Exception f){
+            System.out.println(f);
+        }   
+       
     }
 }
 
