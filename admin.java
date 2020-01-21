@@ -2,9 +2,16 @@ import java.awt.*;
 import java.awt.event.*;
 import java.sql.*;  
 import javax.swing.*;
-
-class admin{
+import java.sql.Date.*;
+import java.time.LocalTime;  
+import java.util.*;
+public class admin{
+	
+	
+	
 	admin(){
+		
+								
 		
 		//colors
 		Color b = new Color(131, 111, 255);
@@ -48,6 +55,58 @@ class admin{
 		jb3.setBounds(400,200,150,30);
 		jp.add(jb3);
 		
+		JLabel jlb8 = new  JLabel("Someone else is on this computer, use another computer",JLabel.CENTER);
+		jlb8.setBounds(80,300,520,30);
+		jlb8.setFont(font);
+     	jlb8.setForeground(Color.red);
+		jp.add(jlb8);
+		jlb8.setVisible(false);
+		
+		
+		jb3.addActionListener(new ActionListener(){
+				   public void actionPerformed(ActionEvent e){
+					   try{
+						   Class.forName("com.mysql.jdbc.Driver");
+							//local host is good
+							Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/login?characterEncoding=latin1","root","admin"); 
+							
+							PreparedStatement stmt = con.prepareStatement("select * from students where pc=?");
+							stmt.setInt(1,Integer.parseInt(jtf.getText()));
+							ResultSet rs = stmt.executeQuery();
+							if(rs.next()){
+								
+									if(rs.getTime(5)!= null){
+										jlb8.setVisible(true);
+									}
+									else{
+										jlb8.setVisible(false);
+									}
+								
+							}
+							String sql = "insert into students values(?,?,?,?,?)";
+							PreparedStatement spst = con.prepareStatement(sql);
+							spst.setInt(1,Integer.parseInt(jtf.getText()));
+							spst.setInt(2,Integer.parseInt(jtf2.getText()));
+							java.util.Date date=new java.util.Date();  
+							
+							long ctm=System.currentTimeMillis();  
+							Date d= new Date(ctm);  
+							spst.setDate(3,d);
+							
+							LocalTime now = LocalTime.now();
+							Time time = Time.valueOf( now );
+							spst.setTime(4,time);
+							
+							spst.setTime(5,null);
+							spst.executeUpdate();
+							con.close();
+					   }catch(Exception a){
+						   
+					   }
+					}  
+			    });
+		
+		
 		
 		JButton jb4 = new JButton("Cancle");
 		jb4.setFont(font);
@@ -55,6 +114,13 @@ class admin{
 		jb4.setForeground(Color.white);
 		jb4.setBounds(180,200,150,30);
 		jp.add(jb4);
+		
+		jb4.addActionListener(new ActionListener(){
+				   public void actionPerformed(ActionEvent e){
+					   jp.setVisible(false);
+					 
+				    }  
+			    });
 		
 		jp.setBackground(b);
 		jp.setVisible(false);
@@ -65,8 +131,7 @@ class admin{
 		JPanel jp2 = new JPanel();
 		jp2.setBounds(120,110,660,550);
 		jp2.setLayout(null);
-		jp2.setVisible(false);
-		jp2.setBackground(b);
+		
 		
 		
 		JLabel jlb4 = new JLabel("Pc number");
@@ -88,17 +153,69 @@ class admin{
 		jb5.setBounds(380,150,150,30);
 		jp2.add(jb5);
 		
+		JLabel jlb7 = new  JLabel("Invalid Pc number",JLabel.CENTER);
+		jlb7.setBounds(280,300,200,30);
+		jlb7.setFont(font);
+     	jlb7.setForeground(Color.red);
+		jp2.add(jlb7);
+		jlb7.setVisible(false);
+		jp2.setVisible(false);
+		jp2.setBackground(b);
+		
+		jb5.addActionListener(new ActionListener(){
+				   public void actionPerformed(ActionEvent e){
+					   //get all the details from database
+					 try{
+						   Class.forName("com.mysql.jdbc.Driver");
+							//local host is good
+							Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/login?characterEncoding=latin1","root","admin");  
+							
+							PreparedStatement stmt = con.prepareStatement("select * from students where pc=?");
+							stmt.setInt(1,Integer.parseInt(jtf4.getText()));
+							ResultSet rs = stmt.executeQuery();
+							if(rs.next()== true)  {
+									jlb7.setVisible(false);
+									System.out.println(rs.getInt(2));
+									//form tree here
+									
+									JFrame jfrm = new JFrame();
+									String column [] = {"SIMS","Date(year-month-date)","Start time","End time"};
+									while(rs.getInt()){
+										//add the data to tree
+										String data[][] = {{rs.getInt(2),rs.getInt(3),rs.getInt(4),rs.getInt(5)},};
+									}
+									JTable jt=new JTable(data,column);    
+									         
+									JScrollPane sp=new JScrollPane(jt);    
+									jfrm.add(sp);          
+									jfrm.setSize(800,700);
+									jfrm.setLocationRelativeTo(null);
+									jfrm.setVisible(true);   
+									
+							}else{
+								jlb7.setVisible(true);
+							}
+							
+							con.close();
+					   }catch(Exception a){System.out.println(f);}
+					    
+					 
+				    }  
+			    });
+		
+		
 		JButton jb6 = new JButton("Cancle");
 		jb6.setFont(font);
 		jb6.setBackground(Color.red);
 		jb6.setForeground(Color.white);
 		jb6.setBounds(180,150,150,30);
 		jp2.add(jb6);
-		
 		f.add(jp2);
-		
-		
-		
+		jb6.addActionListener(new ActionListener(){
+				   public void actionPerformed(ActionEvent e){
+					   jp2.setVisible(false);
+				    }  
+			    });
 		
 		JLabel l = new JLabel("RIZVI COLLEGE",JLabel.CENTER);
 		l.setFont(new Font("SansSerif",Font.PLAIN,35));
@@ -117,7 +234,7 @@ class admin{
 		f.add(jb);
 		jb.addActionListener(new ActionListener(){
 				   public void actionPerformed(ActionEvent e){
-					   
+					   jp2.setVisible(false);
 						jp.setVisible(true);			   
 					}  
 			    });
@@ -144,6 +261,8 @@ class admin{
 	
 	}
 	public static void main(String args[]){
+		
+									 
 		new admin();
 	}
 	
