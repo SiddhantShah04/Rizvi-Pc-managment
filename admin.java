@@ -4,20 +4,16 @@ import java.sql.*;
 import javax.swing.*;
 import java.sql.Date.*;
 import java.time.LocalTime;  
-import java.util.*;
-public class admin{
-	
-	
-	
+import javax.swing.table.DefaultTableModel;
+import java.text.DateFormat;  
+
+public class admin{	
 	admin(){
-		
-								
 		
 		//colors
 		Color b = new Color(131, 111, 255);
 		//font
 		Font font = new Font("SansSerif",Font.PLAIN,20);
-		
 		
 		JFrame f = new JFrame();
 		
@@ -75,22 +71,24 @@ public class admin{
 							ResultSet rs = stmt.executeQuery();
 							if(rs.next()){
 								
-									if(rs.getTime(5)!= null){
+									if(rs.getTime(5)== null){
 										jlb8.setVisible(true);
+										return;
 									}
 									else{
 										jlb8.setVisible(false);
 									}
-								
 							}
+							jlb8.setVisible(false);
 							String sql = "insert into students values(?,?,?,?,?)";
 							PreparedStatement spst = con.prepareStatement(sql);
+							
 							spst.setInt(1,Integer.parseInt(jtf.getText()));
 							spst.setInt(2,Integer.parseInt(jtf2.getText()));
-							java.util.Date date=new java.util.Date();  
+							java.util.Date date = new java.util.Date();  
 							
 							long ctm=System.currentTimeMillis();  
-							Date d= new Date(ctm);  
+							Date d = new Date(ctm);  
 							spst.setDate(3,d);
 							
 							LocalTime now = LocalTime.now();
@@ -100,6 +98,8 @@ public class admin{
 							spst.setTime(5,null);
 							spst.executeUpdate();
 							con.close();
+							jtf.setText("");
+							jtf2.setText("");
 					   }catch(Exception a){
 						   
 					   }
@@ -173,28 +173,32 @@ public class admin{
 							PreparedStatement stmt = con.prepareStatement("select * from students where pc=?");
 							stmt.setInt(1,Integer.parseInt(jtf4.getText()));
 							ResultSet rs = stmt.executeQuery();
-							if(rs.next()== true)  {
-									jlb7.setVisible(false);
-									System.out.println(rs.getInt(2));
-									//form tree here
+					
 									
-									JFrame jfrm = new JFrame();
-									String column [] = {"SIMS","Date(year-month-date)","Start time","End time"};
-									while(rs.getInt()){
-										//add the data to tree
-										String data[][] = {{rs.getInt(2),rs.getInt(3),rs.getInt(4),rs.getInt(5)},};
-									}
-									JTable jt=new JTable(data,column);    
-									         
-									JScrollPane sp=new JScrollPane(jt);    
-									jfrm.add(sp);          
-									jfrm.setSize(800,700);
-									jfrm.setLocationRelativeTo(null);
-									jfrm.setVisible(true);   
+							
+							//form tree here
 									
-							}else{
-								jlb7.setVisible(true);
+							JFrame jfrm = new JFrame();
+							DefaultTableModel model = new DefaultTableModel();
+							JTable jtbl = new JTable(model);
+							model.addColumn("SIMS");
+						    model.addColumn("Date(year-month-date)");
+							model.addColumn("Start time");
+						    model.addColumn("End time");
+									
+									
+							while(rs.next()){
+										 
+								model.addRow(new Object[]{rs.getInt(2), rs.getDate(3),rs.getTime(4),rs.getTime(5)});
 							}
+																         
+							JScrollPane sp=new JScrollPane(jtbl);    
+							jfrm.add(sp);          
+							jfrm.setSize(800,700);
+							jfrm.setLocationRelativeTo(null);
+							jfrm.setVisible(true);   
+									
+							
 							
 							con.close();
 					   }catch(Exception a){System.out.println(f);}
